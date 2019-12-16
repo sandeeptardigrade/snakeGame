@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    body{
+    background-color:black;
+}
+html, main{
+    height: 100%;
+    margin: 0;
+}
+main, h1{
+    display: flex;
+    justify-content: center;
+    align-items:  center;
+}
+h1{
+    color: red;
+} 
+.featureLists {
+    display: flex;
+    justify-content: space-between;
+    
+}
+.bkGround {
+    display: flex;
+    justify-content:center;
+}
+.title{
+    font-family:'Courier Prime';
+    color: white;
+}
+option{
+    font-family: 'Lobster';
+    
+}
+select{
+    font-family: 'Lobster';
+}
+#bgColor{
+    font-family: 'Lobster';
+}
+#color{
+    font-family: 'Lobster';
+}
+.greenText{
+    background-color: green;
+}
+.blueText{
+    background-color: blue;
+}
+.yellowText{
+    background-color: yellow;
+}
+.brownText{
+    background-color: brown;
+}
+.pinkText{
+    background-color: pink;
+}
+.purpleText{
+    background-color: purple;
+}
+.blackText{
+    background-color: black;
+}
+.orangeText{
+    background-color: orange;
+}
+.skyblueText{
+    background-color: skyblue;
+}
+.chocolateText{
+    background-color: chocolate;
+}</style>
+</head>
+<body>
+    <div class = "containerHoldingTitle">
+        <h1 class = "title">Snake Lab:Styling State</h1>
+    </div>  
+    <div class = "featureLists">
+        <select name="" id="speed" onchange="changeSpeed()">
+            <option value="6">speed</option>
+            <option value="2" >Fast</option>
+            <option value="5">Medium</option>
+            <option value="7.5">slow</option>
+            <option value="10" >turtle</option>
+        </select>
+        <select name="" id="size" onchange="changeSize()">
+            <option value="400">size</option>
+            <option value="560">Big board</option>
+            <option value="400">Medium board</option>
+            <option value="288">Small board</option>
+            <option value="208">Tiny board</option>
+        </select>
+        <select name="" id="snakeColor" onchange="">
+            <option  class = "greenText" value="green">snake color</option>
+            <option class = "blueText" value="blue">blue</option>
+            <option class = "yellowText" value="yellow">yellow</option>
+            <option class = "brownText" value="brown">brown</option>
+            <option class = "pinkText" value="pink">pink</option>
+            <option class = "purpleText" value="purple">purple</option>
+            <option class = "blackText" value="black">black</option>
+            <option class = "orangeText" value="orange">orange</option>
+            <option class = "skyblueText" value="skyblue">skyblue</option>
+            <option class = "chocolateText" value="chocolate">chocolate</option>
+        </select>
+        <select name="" id="appleColor" onchange="colorChange()">
+            <option  class = "redText" value="red">apple color</option>
+            <option class = "blueText" value="blue">blue</option>
+            <option class = "yellowText" value="yellow">yellow</option>
+            <option class = "brownText" value="brown">brown</option>
+            <option class = "pinkText" value="pink">pink</option>
+            <option class = "purpleText" value="purple">purple</option>
+            <option class = "blackText" value="black">black</option>
+            <option class = "orangeText" value="orange">orange</option>
+            <option class = "skyblueText" value="skyblue">skyblue</option>
+            <option class = "chocolateText" value="chocolate">chocolate</option>
+        </select>
+        
+        
+    </div>
+    <div class = "bkGround">
+            <input type="text" id="bgColor" placeholder="background color">
+            <input type="submit" id="color" value="Change Color" onclick="backgroundColor()">
+        </div>
+    <main>
+        <div class = "canvas">
+        <canvas width="400" height="400" id="game" style="border: 1px solid rgb(253, 252, 252);"></canvas>
+        </div>
+       </main>
+       <script>
+       let canvas = document.getElementById('game');
+let context = canvas.getContext('2d');
+const grid = 16;
+let count = 0;
+let snake = {
+    x: 160,
+    y: 160,
+    dx: grid,
+    dy: 0,
+    cells: [],
+    maxCells: 1
+}
+let apple = {
+    x: 96,
+    y: 32,
+}
+
+let userSpeed = 6;
+
+
+ function changeSpeed (){
+    userSpeed = document.getElementById("speed").value
+ }
+
+
+
+ function changeSize (){
+   canvas.width = document.getElementsByClassName("size").value;
+   canvas.height = document.getElementsByClassName("size").value
+ }
+
+ function backgroundColor (){
+    canvas.style.backgroundColor = document.getElementById("bgColor").value;
+ }
+function changeColor () {
+document.getElementById('appleColor').style.backgroundColor = document.getElementById('appleColor').value
+}
+ 
+
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random()* (max - min)) + min;
+};
+function loop() {
+    requestAnimationFrame(loop);
+    if (++count < userSpeed) {
+        return;
+    }
+    count = 0;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    snake.x += snake.dx;
+    snake.y += snake.dy;
+    if(snake.x < 0) {
+        snake.x = canvas.width;
+    }
+    else if(snake.x >= canvas.width) {
+        snake.x = 0;
+    };
+    if(snake.y < 0) {
+        snake.y = canvas.height;
+    }
+    else if(snake.y >= canvas.height) {
+        snake.y = 0;
+    };
+    snake.cells.unshift({
+        x: snake.x,
+        y: snake.y
+    });
+    if (snake.cells.length > snake.maxCells) {
+      snake.cells.pop();
+    }
+    
+    context.fillStyle = document.getElementById("appleColor").value;
+    context.fillRect(apple.x, apple.y,grid, grid);
+
+    context.fillStyle =document.getElementById("snakeColor").value;;
+    snake.cells.forEach(function(cell, index) {
+        context.fillRect(cell.x, cell.y, grid-1, grid-1);
+    if(apple.x === snake.x && apple.y === snake.y) {
+        snake.maxCells++;
+        apple.x = getRandomInt(0, (canvas.width/16))* grid;
+        apple.y = getRandomInt(0, (canvas.width/16))* grid;
+    }
+    for (var i = index + 1; i < snake.cells.length; i++) {
+        if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+            snake.x = 160;
+            snake.y = 160;
+            snake.cells = [];
+            snake.maxCells = 1;
+            snake.dx = grid;
+            snake.dy = 0;
+            apple.x = 176;
+            apple.y = 176;
+        }
+    }
+    });
+}
+    document.addEventListener('keydown', function(e){
+    if (e.which === 37 && snake.dx === 0 || e.which === 65 && snake.dx === 0 ){
+        snake.dx = -grid;
+        snake.dy = 0;
+    } else if(e.which === 38 && snake.dy === 0 || e.which === 87 && snake.dy === 0 ){
+        snake.dx = 0;
+        snake.dy = -grid;
+    } else if (e.which === 39 && snake.dx === 0 || e.which === 68 && snake.dx === 0 ){
+        snake.dx = grid;
+        snake.dy = 0;
+    } else if(e.which === 40 && snake.dy === 0 || e.which === 83 && snake.dy === 0 ){
+        snake.dx = 0;
+        snake.dy = grid;
+    }
+});
+requestAnimationFrame(loop);
+
+</script>
+</body>
+</html>
